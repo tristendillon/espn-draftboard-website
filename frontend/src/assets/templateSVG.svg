@@ -1,0 +1,20 @@
+<svg xmlns="xmlnsData" viewBox="w h viewW viewH">
+    <!--
+        PATH DATA
+    -->
+</svg>
+You can generate SVGs from PNGS with a website I like,
+if I find I will link it, try and only generate Clipart into SVGs:
+
+w = width of svg in the HTML
+h = height of svg in the HTM
+
+viewW = The width of the svg's view port of the image, 
+so, if its a 32x32 image and the viewW is 16 it would 
+cut 16 pixels off the right side, starting from the orgin. 
+
+viewH = The height of the svg's view port of the image, 
+so, if its a 32x32 image and the viewH is 16 it would 
+cut 16 pixels off the bottom side, starting from the orgin. 
+
+Path data can be generated from that website
