@@ -1,17 +1,18 @@
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-            
+from .utils.token_utils import generate_token
+
 class Token(models.Model):
     TYPE_CHOICES = (
         ('frontend', 'Frontend'),
         ('extension', 'Chrome Extension'),
     )
-    name = models.CharField(max_length=100)
     token_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
-    token = models.CharField(max_length=50)
+    token = models.CharField(max_length=255, default=generate_token)
 
-@receiver(pre_save, sender=Token)
-def generate_token(sender, instance, **kwargs):
-    if not instance.token:
-        instance.token = generate_token()
+    @classmethod
+    def set_new_token(cls, token_type, new_token):
+        existing_token = cls.objects.filter(token_type=token_type).first()
+        if existing_token:
+            existing_token.delete()
+
+        return cls.objects.create(token_type=token_type, token=new_token)
