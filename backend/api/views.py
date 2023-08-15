@@ -7,18 +7,7 @@ from rest_framework import status
 from .permissions import PostPermission
 from .serializers import *
 from .models import *
-
-class PostTest(APIView):
-    permission_classes = [PostPermission]
-    
-    def post(self, request, *args, **kwargs):
-        serializer = PostSerializer
-        if serializer.is_valid():
-            return Response({'status': 'success'})
         
-        return Response({'status': 'error'})
-    
-    
 class PostDraftView(APIView):
     permission_classes = [PostPermission,]
     
@@ -28,19 +17,19 @@ class PostDraftView(APIView):
             data = serializer.validated_data
             
             draft = Draft.objects.create(
+                id = data.get('id'),
                 teams = data.get('teams'),
                 roster_spots = data.get('roster_spots'),
-                name = data.get('position'),
-                minutes = data.get('minutes'),
-                seconds = data.get('seconds'),
+                name = data.get('name'),
             )
-            return Response(data=draft, status=status.HTTP_201_CREATED )
+            
+            serialized_draft = PostDraftSerializer(draft)
+            return Response(data=serialized_draft.data, status=status.HTTP_201_CREATED )
             
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetDraftView(APIView):
     pass
-
 
 
 class PostPickView(APIView):
@@ -56,16 +45,20 @@ class PostPickView(APIView):
             data = serializer.validated_data
             draft = get_object_or_404(Draft, pk = draft_id)
             
+            icon = data.get('icon', DEFAULT_PICK_ICON)
+            
             pick = Pick.objects.create(
                 name = data.get('name'),
-                icon = data.get('icon'),
+                icon = icon,
                 football_team = data.get('football_team'),
                 pick_round = data.get('pick_round'),
                 pick_number = data.get('pick_number'),
                 position = data.get('position'),
-                draft_id = draft.pk
+                draft_id = draft
             )
-            return Response(data=pick, status=status.HTTP_201_CREATED )
+            
+            serialized_pick = PostPickSerializer(pick)
+            return Response(data=serialized_pick.data, status=status.HTTP_201_CREATED )
             
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -87,12 +80,16 @@ class PostTeamView(APIView):
             data = serializer.validated_data
             draft = get_object_or_404(Draft, pk= draft_id)
             
+            team_image =  data.get('team_image', DEFAULT_TEAM_ICON)
+            
             team = Team.objects.create(
                 name = data.get('name'),
-                draft_id = draft.pk,
-                team_image = data.get('team_image'),
+                draft_id = draft,
+                team_image = team_image,
             )
-            return Response(data=team, status=status.HTTP_201_CREATED )
+            
+            serialized_team = PostTeamSerializer(team)
+            return Response(data=serialized_team.data, status=status.HTTP_201_CREATED )
         
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

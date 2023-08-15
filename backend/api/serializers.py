@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from .models import *
 
-
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Draft
-        fields = '__all__' 
-
 class PostDraftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Draft
