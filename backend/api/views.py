@@ -18,7 +18,7 @@ class PostDraftView(APIView):
             data = serializer.validated_data
             
             draft = Draft.objects.create(
-                id = data.get('id') + '-' + str(datetime.datetime.now().year),
+                id = data.get('id') + '-' + str(datetime.now().year),
                 teams = data.get('teams'),
                 roster_spots = data.get('roster_spots'),
                 name = data.get('name'),
@@ -148,7 +148,7 @@ class GetTimerView(APIView):
     
     def get(self, request, draft_id):
         draft = get_object_or_404(Draft, pk = draft_id)
-        timer = Team.objects.get(draft_id = draft)
+        timer = Timer.objects.get(draft_id = draft)
         
-        serialized_timer = PostTimerSerializer(timer, many=True)
+        serialized_timer = PostTimerSerializer(timer)
         return Response(data=serialized_timer.data, status=status.HTTP_200_OK )
