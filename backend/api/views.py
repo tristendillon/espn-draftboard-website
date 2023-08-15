@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,7 +18,7 @@ class PostDraftView(APIView):
             data = serializer.validated_data
             
             draft = Draft.objects.create(
-                id = data.get('id'),
+                id = data.get('id') + '-' + datetime.datetime.now().year,
                 teams = data.get('teams'),
                 roster_spots = data.get('roster_spots'),
                 name = data.get('name'),

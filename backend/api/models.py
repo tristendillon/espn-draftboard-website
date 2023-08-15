@@ -4,8 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Draft(models.Model):
-    id = models.IntegerField(primary_key=True, null=False)
-    year = models.PositiveIntegerField(null=True, default=datetime.datetime.now().year)
+    id = models.CharField(primary_key=True, null=False)
     name = models.CharField(null=False, max_length=200)
     teams = models.IntegerField(null=False,)
     roster_spots = models.IntegerField(null=False,)
