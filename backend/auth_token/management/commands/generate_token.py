@@ -16,5 +16,6 @@ class Command(BaseCommand):
             
         new_token = generate_token()
         token = Token.set_new_token(token_type, new_token)
+        print(token.token)
         token_str = token.token.decode('utf-8')
         self.stdout.write(self.style.SUCCESS(f'New {token_type} token set successfully: {token_str}'))
