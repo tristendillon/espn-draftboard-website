@@ -19,6 +19,6 @@ class Pick(models.Model):
     icon = models.ImageField(null=True,)
     football_team = models.TextField(null=True, max_length=50,)
     pick_round = models.IntegerField(null=False,)
-    pick_round = models.IntegerField(null=False,)
+    pick_number = models.IntegerField(null=False,)
     position = models.CharField(null=False, max_length=10,)
     draft_id = models.ForeignKey(to=Draft, null=False, on_delete=models.CASCADE)
