@@ -18,7 +18,7 @@ class PostDraftView(APIView):
             data = serializer.validated_data
             
             draft = Draft.objects.create(
-                id = data.get('id') + '-' + datetime.datetime.now().year,
+                id = f'{data.get("id")} - {datetime.datetime.now().year}',
                 teams = data.get('teams'),
                 roster_spots = data.get('roster_spots'),
                 name = data.get('name'),
