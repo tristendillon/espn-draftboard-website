@@ -78,18 +78,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'server.wsgi.application'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
+    #'DEFAULT_AUTHENTICATION_CLASSES': (
+    #    'rest_framework_simplejwt.authentication.JWTAuthentication',
+    #),  
+
 }
 
-JWT_AUTH = {
-    'JWT_SECRET_KEY': 'ae53c592ca5285038c590b33b052932d05a109404314a02be1081fb1d2bf4241',  
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': timedelta(days=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
-}
+#JWT_AUTH = {
+#    'JWT_SECRET_KEY': 'ae53c592ca5285038c590b33b052932d05a109404314a02be1081fb1d2bf4241',  
+#    'JWT_ALGORITHM': 'HS256',
+#    'JWT_ALLOW_REFRESH': True,
+#    'JWT_EXPIRATION_DELTA': timedelta(days=1),
+#    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+#}
 
 
 
