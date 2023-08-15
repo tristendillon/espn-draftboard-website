@@ -45,7 +45,19 @@ class="cell rounded-xl ml-1 mt-1 py-2 px-2 h-[100px]">
 
 export default {
   props: {
-
+    pickNumber: {
+      type: Integer
+    },
+    columnIndex: {
+      type: Integer
+    },
+    pickSetting: {
+      type: Boolean,
+      default: false,
+    },
+    pick: {
+      type: JSON,
+    }
   },
   computed: {
     calculateBG(pos){
@@ -90,7 +102,9 @@ export default {
   setup () {
       
 
-    return {}
+    return {
+
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .permissions import PostPermission
+from .permissions import PostPermission, GetPermission
 from .serializers import *
 from .models import *
         
@@ -18,7 +18,7 @@ class PostDraftView(APIView):
             data = serializer.validated_data
             
             draft = Draft.objects.create(
-                id = f'{data.get("id")} - {datetime.datetime.now().year}',
+                id = data.get('id') + '-' + str(datetime.datetime.now().year),
                 teams = data.get('teams'),
                 roster_spots = data.get('roster_spots'),
                 name = data.get('name'),
@@ -30,7 +30,13 @@ class PostDraftView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetDraftView(APIView):
-    pass
+    permission_classes = [GetPermission,]
+    
+    def get(self, request, draft_id):
+        draft = get_object_or_404(Draft, pk = draft_id)
+        serialized_draft = PostDraftSerializer(draft)
+        return Response(data=serialized_draft.data, status=status.HTTP_200_OK )
+        
 
 
 class PostPickView(APIView):
@@ -64,7 +70,14 @@ class PostPickView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetPickView(APIView):
-    pass
+    permission_classes = [GetPermission,]
+    
+    def get(self, request, draft_id):
+        draft = get_object_or_404(Draft, pk = draft_id)
+        picks = Pick.objects.filter(draft_id = draft)
+        
+        serialized_picks = PostPickSerializer(picks, many=True)
+        return Response(data=serialized_picks.data, status=status.HTTP_200_OK )
     
     
     
@@ -96,5 +109,46 @@ class PostTeamView(APIView):
     
     
 class GetTeamView(APIView):
-    pass
+    permission_classes = [GetPermission,]
     
+    def get(self, request, draft_id):
+        draft = get_object_or_404(Draft, pk = draft_id)
+        teams = Team.objects.filter(draft_id = draft)
+        
+        serialized_teams = PostTeamSerializer(teams, many=True)
+        return Response(data=serialized_teams.data, status=status.HTTP_200_OK )
+    
+    
+class PostTimerView(APIView):
+    permission_classes = [PostPermission,]
+    
+    def post(self, request):
+        if not (draft_id := request.data.get('draft_id')):
+            return Response({'error': 'draft_id must be present in the request'}, status= status.HTTP_400_BAD_REQUEST)
+        
+        serializer = PostTimerSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            data = serializer.validated_data
+            draft = get_object_or_404(Draft, pk= draft_id)
+            
+            timer = Timer.objects.create(
+                minutes = data.get("minutes"),
+                seconds = data.get("seconds"),
+                draft_id = draft
+            )
+            
+            serialized_timer = PostTimerSerializer(timer)
+            return Response(data=serialized_timer.data, status=status.HTTP_201_CREATED )
+        
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class GetTimerView(APIView):
+    permission_classes = [GetPermission,]
+    
+    def get(self, request, draft_id):
+        draft = get_object_or_404(Draft, pk = draft_id)
+        timer = Team.objects.get(draft_id = draft)
+        
+        serialized_timer = PostTimerSerializer(timer, many=True)
+        return Response(data=serialized_timer.data, status=status.HTTP_200_OK )
