@@ -1,10 +1,10 @@
 <template>
 <div v-if="pick" :class="calculateBG(pick.position)" 
-class="cell rounded-xl ml-1 mt-1 py-2 px-2 h-[100px]">
+class="cell py-2 rounded-xl px-2 h-[100px]">
   <div class="player flex flex-row">
     <div>
       <div class="text-pick-text player-name font-bold">
-        {{ pick.name }}
+        {{ pick.name.split(" ")[0].charAt(0 ) }}. {{ pick.name.split(" ")[1] }}
       </div>
       <div class="text-pick-position">
         {{ pick.position }} <a class="font-bold">-</a> {{ pick.football_team }}
@@ -42,24 +42,54 @@ class="cell rounded-xl ml-1 mt-1 py-2 px-2 h-[100px]">
 </template>
 
 <script>
-
 export default {
   props: {
     pickNumber: {
-      type: Integer
+      type: Number
     },
     columnIndex: {
-      type: Integer
+      type: Number
     },
     pickSetting: {
       type: Boolean,
       default: false,
     },
     pick: {
-      type: JSON,
+      type: Object,
+    },
+    draft: {
+      type: Object
+    },
+    picks: {
+      type: Array
     }
   },
-  computed: {
+  methods: {
+    calculateHighlight(x, y) {
+      if (x == 0 && y == 0) { return true; }
+      if (y % 2 == 0) {
+        if (x == 0) { 
+          if (this.picks[x][y -1 ]){
+            return true
+          }
+          return false; 
+        }
+        if (this.picks[x - 1][y]){
+          return true;
+        }
+        return false;
+      } else{ 
+        if (x == this.draft.teams - 1) { 
+          if (this.picks[x][y -1 ]){
+            return true
+          }
+          return false; 
+        }
+        if (this.picks[x + 1][y]){
+          return true;
+        }
+      }
+    },
     calculateBG(pos){
       switch (pos) {
         case 'RB': return 'bg-pick-rb';
@@ -100,7 +130,6 @@ export default {
     }
   },
   setup () {
-      
 
     return {
 
@@ -109,6 +138,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+
+.picked {
+  color: #00131F;
+  opacity: 0.5;
+}
+
+.not-picked {
+  color: #fefeff; 
+  opacity: 0.7;
+} 
 
 </style>
