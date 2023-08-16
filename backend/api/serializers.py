@@ -19,4 +19,4 @@ class PostTeamSerializer(serializers.ModelSerializer):
 class PostTimerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Timer
-        fields = 'all'
+        fields = '__all__'
