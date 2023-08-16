@@ -61,6 +61,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5000',
     'https://fantasy.espn.com', 
 ]
 

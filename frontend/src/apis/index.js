@@ -9,7 +9,7 @@ function getCurrentYear() {
 
 export async function fetchDraft(id, authToken) {
     try {
-        const response = await fetch(`${APIURL}get-draft?id=${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-draft/${id}-${getCurrentYear()}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`
             }
@@ -22,7 +22,7 @@ export async function fetchDraft(id, authToken) {
 
 export async function fetchTeams(id, authToken) {
     try {
-        const response = await fetch(`${APIURL}get-teams?id=${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-teams/${id}-${getCurrentYear()}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`
             }
@@ -35,7 +35,7 @@ export async function fetchTeams(id, authToken) {
 
 export async function fetchPicks(id, authToken) {
     try {
-        const response = await fetch(`${APIURL}get-picks?id=${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-picks/${id}-${getCurrentYear()}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`
             }
@@ -48,7 +48,7 @@ export async function fetchPicks(id, authToken) {
 
 export async function fetchTimer(id, authToken) {
     try {
-        const response = await fetch(`${APIURL}get-timer?id=${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-timer/${id}-${getCurrentYear()}`, {
             headers: {
                 Authorization: `Bearer ${authToken}`
             }

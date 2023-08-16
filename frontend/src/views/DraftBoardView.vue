@@ -110,7 +110,8 @@ export default {
     });
 
     onMounted(async () => {
-      const authToken = process.env.BEARER_TOKEN;
+      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21faWQiOiJiRk8zOHdxTFZwTUZtVGVHWmhwQ3d3IiwiZXhwIjoxNjk5OTI4NDM5fQ.TjAPF29aJEp5-vb4JuWZ2RKQ7ArTiNbiqo5z6YPelOU'
+      //const authToken = process.env.BEARER_TOKEN;
 
       const fetchedDraft = await fetchDraft(id, authToken);
       const fetchedTeams = await fetchTeams(id, authToken);
