@@ -1,4 +1,5 @@
 <template>
+<div id="main" >
 <div v-if="picks !== [] && draft !== null">
   <div class="fixed-header flex flex-row justify-center" v-scroll-transform="{}">
     <div v-if="timerActive" class="flex items-center">
@@ -12,8 +13,8 @@
         <h2 class="flex justify-end text-xl text-gray-500 mr-3"> of 16</h2>
     </div>
   </div>
-  <div class="draft-board flex px-10 justify-around absolute">
-    <div v-for="(column, columnIndex) in picks" :key="columnIndex" class="flex-col items-stretch w-[200px]">
+  <div class="draft-board flex px-10 justify-around absolute py-5">
+    <div v-for="(column, columnIndex) in picks" :key="columnIndex" class="flex-col items-stretch" :class="calculateWidth">
       <div v-if="teams[columnIndex]" class="draft-header-container relative" v-y-transform="calculateTransformY">
         <div class="draft-user-header flex justify-center">
           <div class="header-text mt-3 mb-3 text-team">{{ teams[columnIndex].name.trim() }}</div>
@@ -53,6 +54,7 @@
     <p>Loading...</p>
   </div>
 </div>
+</div>
 
 </template>
 
@@ -65,6 +67,14 @@ import { fetchDraft, fetchPicks, fetchTeams, fetchTimer} from '../apis/index.js'
 
 export default {
   computed: {
+    calculateWidth () {
+      const numberOfTeams = this.draft.teams;
+      if (numberOfTeams < 10) {
+        return "w-[230px]"
+      }
+      return "w-[200px]"
+
+    },
     calculateTransformY(){
       const windowWidth = window.innerWidth;
       let translateYValue = 67;

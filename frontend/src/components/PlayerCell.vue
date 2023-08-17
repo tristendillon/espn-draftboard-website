@@ -17,7 +17,7 @@ class="cell py-2 rounded-xl px-2 h-[100px]">
   </div>
     <div class="flex-1">
       <span class="flex justify-end font-semibold opacity-70 text-pick-number font-muli">
-        {{ calculatePick(pickNumber, columnIndex, true) }}
+        {{ calculatePick(pickNumber, columnIndex, false) }}
       </span>
       <div class="avatar-player flex justify-end">
         <img class="w-[75px] h-[64px]" :src="pick.icon"/>
@@ -34,7 +34,7 @@ class="cell py-2 rounded-xl px-2 h-[100px]">
         <i :class="calculateArrow(pickNumber, columnIndex)"  class="fa-sharp fa-solid ml-2"></i>
       </div>
       <div class="flex justify-end font-semibold opacity-70 text-pick-number font-muli">
-        {{ calculatePick(pickNumber, columnIndex, true)}}
+        {{ calculatePick(pickNumber, columnIndex, false)}}
       </div>
     </div>
   </div>
