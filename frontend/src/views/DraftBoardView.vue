@@ -211,8 +211,8 @@ export default {
       }
       draft.value.round = calculateRound();
 
-      const pickSocket = new WebSocket('ws://127.0.0.1:4000/pick/');
-      const timerSocket = new WebSocket('ws://127.0.0.1:4000/timer/');
+      const pickSocket = new WebSocket('wss://espndraftboard.com/ws/');
+      const timerSocket = new WebSocket('wss://espndraftboard.com/ws/');
 
       pickSocket.onopen = ((event) => {
         //console.log("Pick Socket connection opened:", event);
@@ -221,6 +221,9 @@ export default {
       pickSocket.onmessage = function(event) {
         const message = JSON.parse(event.data);
         const pick = message.message;
+        if(pick.draft_id != id) {
+          return;
+        }
         const [x, y] = calculateArrayPosition(pick.pick_round, pick.pick_number);
         picks.value[x][y] = pick;
         draft.value.round = calculateRound();
@@ -243,6 +246,9 @@ export default {
       timerSocket.onmessage = ((event) => {
         const message = JSON.parse(event.data);
         timerData = message.message;
+        if(timerData.draft_id != id) {
+          return;
+        }
         timer.value.minutes = timerData.minutes;
         timer.value.seconds = timerData.seconds;
         draft.value.minutes = timerData.minutes;

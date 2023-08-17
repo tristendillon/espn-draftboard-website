@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-l8_xwdik_o09m5!e5e!1z+0s)a*7h9e8l63l0cc&j1kwzzizzk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'espndraftboard.com']
+ALLOWED_HOSTS = ['www.espndraftboard.com','fantasy.espn.com', 'espndraftboard.com']
 
 # Application definition
 
@@ -45,11 +45,9 @@ INSTALLED_APPS = [
     
     # ---Installed apps---
     'rest_framework',
-    'channels'
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5000", 
     "https://fantasy.espn.com",
     "https://www.espndraftboard.com",
     "https://espndraftboard.com"
@@ -113,14 +111,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
-ASGI_APPLICATION = 'api.asgi.application'
-
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",  # You can use other backends as well
-    },
-}
 
 JWT_SECRET_KEY = 'b6ad7ed48206b3efe08736861f488cc51557e4337adb9cffe784b9909eb9fe56'
 
