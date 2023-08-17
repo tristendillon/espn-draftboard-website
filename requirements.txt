@@ -4,5 +4,3 @@ Pillow
 djangorestframework
 PyJWT
 django-cors-headers
-channels
-daphne

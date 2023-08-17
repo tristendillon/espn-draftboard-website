@@ -13,11 +13,11 @@
           <div class="text-2xl font-muli font-medium text-pick-number text-center mb-5"><a class="hover:text-blue-500" href="https://cash.app/$DraftBoard?qr=1" target="_blank">CashApp</a></div>
           <img src="public/FFdraftCashApp.png" alt="cashapp" />
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
             <div class="text-xl font-muli font-medium text-pick-number text-center mb-5">
               <button @click="navigateToDrafts" class="bg-primary hover:bg-pick-position text-pick-number font-semibold py-2 px-4 rounded-xl shadow" ref="DraftsButton">Drafts</button>
             </div>
-        </div>
+        </div> -->
         <div class="flex flex-col">
           <div class="text-2xl font-poppins font-medium text-pick-number text-center mb-5"><a class="hover:text-blue-500" href="https://venmo.com/code?user_id=2296110345355264909&cre" target="_blank">Venmo</a></div>
           <img class="w-[256px]" src="public/FFdraftVenmo.png" alt="venmo" />

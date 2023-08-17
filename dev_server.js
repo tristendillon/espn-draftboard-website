@@ -1,6 +1,6 @@
 const { exec } = require('child_process');
 
-const backend = exec('pip install -r requirements.txt && python ./backend/manage.py runserver 3000');
+const backend = exec('pip install -r requirements.txt && python3 ./backend/manage.py runserver 3000');
 const frontend = exec('cd frontend && npm install && npm run dev');
 const webSocket = exec('cd websocket && npm install && node server.js');
 
