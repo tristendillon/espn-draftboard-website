@@ -1,6 +1,8 @@
 
-const APIURL = 'http://127.0.0.1:3000/api_v1/';
+//const APIURL = 'http://127.0.0.1:3000/api_v1/';
 //const APIURL = 'https://espndraftboard.com/api/';
+const APIURL = '/api/v1/';
+
 
 function getCurrentYear() {
     const currentDate = new Date();
