@@ -10,5 +10,5 @@ urlpatterns = [
     path('get-draft/<str:draft_id>/', GetDraftView.as_view(),),
     path('get-teams/<str:draft_id>/', GetTeamView.as_view(),),
     path('get-picks/<str:draft_id>/', GetPickView.as_view(),),
-    path('get-timer/<str:draft_id>', GetTimerView.as_view(),),
+    path('get-timer/<str:draft_id>/', GetTimerView.as_view(),),
 ]

@@ -34,10 +34,19 @@
     </div>
   </div>
   <BaseModal class="z-max" :modalActive="modalPopup" @close-modal="closePopup">
-    <div>
-      
+    <div class="p-4">
+      <div class="text-center">
+        <h2 class="text-2xl font-bold mb-2">Thanks for Using FFDraftBoard!</h2>
+        <p class="text-gray-600 mb-4">Consider donating to help support the product and keep it ad free!</p>
+      </div>
+
+      <div class="flex justify-center space-x-6 mt-4">
+        <img src="/public/FFdraftCashApp.png" alt="cashapp" class="w-40 h-40">
+        <img src="/public/FFdraftVenmo.png" alt="venmo" class="w-40 h-40">
+      </div>
     </div>
-  </BaseModal>
+</BaseModal>
+
 </div>
 <div v-else class="flex justify-center items-center h-screen">
   <div class="text-5xl text-white ">
@@ -142,6 +151,7 @@ export default {
         timer.value.minutes = 0;
         timer.value.seconds = 0;
         clearInterval(interval.value);
+        modalPopup.value = true;
         return draft.value.roster_spots;
       }
       return round + 1;

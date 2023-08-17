@@ -2,12 +2,15 @@
   <Transition name="modal-outer">
     <div v-show="modalActive" class="absolute w-full bg-black bg-opacity-30 h-screen top-0 left-0 flex justify-center px-8">
     <Transition name="modal-inner">
-      <div v-if="modalActive" class="p-4 bg-white self-start md:mt-4 sm:mt-2 max-w-screen-md">
+      <div v-if="modalActive" class="p-4 bg-white self-start md:mt-4 sm:mt-2 max-w-screen-md justify-center">
       <slot />
-      <button class="text-white mt-8 bg-primary py-2 px-6" @click="$emit('close-modal')">
-          {{ buttonValue }}
-      </button>
+      <div class="flex justify-center">
+        <button class="text-white mt-8 bg-primary py-2 px-6" @click="$emit('close-modal')">
+            {{ buttonValue }}
+        </button>
+        </div>
       </div>
+      
     </Transition>
     </div>
   </Transition>

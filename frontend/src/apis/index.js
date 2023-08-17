@@ -9,7 +9,7 @@ function getCurrentYear() {
 
 export async function fetchDraft(id) {
     try {
-        const response = await fetch(`${APIURL}get-draft/${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-draft/${id}-${getCurrentYear()}/`, {
         });
         return await response.json();
     } catch (error) {
@@ -19,7 +19,7 @@ export async function fetchDraft(id) {
 
 export async function fetchTeams(id) {
     try {
-        const response = await fetch(`${APIURL}get-teams/${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-teams/${id}-${getCurrentYear()}/`, {
         });
         return await response.json();
     } catch (error) {
@@ -29,7 +29,7 @@ export async function fetchTeams(id) {
 
 export async function fetchPicks(id) {
     try {
-        const response = await fetch(`${APIURL}get-picks/${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-picks/${id}-${getCurrentYear()}/`, {
         });
         return await response.json();
     } catch (error) {
@@ -39,7 +39,7 @@ export async function fetchPicks(id) {
 
 export async function fetchTimer(id) {
     try {
-        const response = await fetch(`${APIURL}get-timer/${id}-${getCurrentYear()}`, {
+        const response = await fetch(`${APIURL}get-timer/${id}-${getCurrentYear()}/`, {
         });
         return await response.json();
     } catch (error) {
