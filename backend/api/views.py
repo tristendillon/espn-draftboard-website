@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .serializers import *
 from .models import *
-        
+
 class PostDraftView(APIView):
     
     def post(self, request):

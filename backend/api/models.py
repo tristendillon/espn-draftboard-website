@@ -19,7 +19,7 @@ class Team(models.Model):
 
 class Pick(models.Model):
     name = models.CharField(null=False, max_length=200)
-    icon = models.CharField(null=False, max_length=400)
+    icon = models.CharField(null=True, blank=True, max_length=400)
     football_team = models.TextField(null=True, max_length=50,)
     pick_round = models.IntegerField(null=False,)
     pick_number = models.IntegerField(null=False,)

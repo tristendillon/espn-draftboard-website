@@ -5,6 +5,9 @@
     <div v-if="timerActive" class="flex items-center">
       <Timer :timer="timer" />
     </div>
+    <div v-else class="flex justify-center items-center">
+      <h1 class="ld:text-5xl md:text-3xl sm:text-xl text-white">00:00</h1>
+    </div>
     <div class="flex ml-24 px-16 items-center justify-center">
       <h1 class="ld:text-4xl md:text-2xl sm:text-xl text-team font-semibold text-center">{{ draft.name.trim() }}</h1>
     </div>
@@ -42,8 +45,8 @@
       </div>
 
       <div class="flex justify-center space-x-6 mt-4">
-        <img src="/public/FFdraftCashApp.png" alt="cashapp" class="w-40 h-40">
-        <img src="/public/FFdraftVenmo.png" alt="venmo" class="w-40 h-40">
+        <img src="/FFdraftCashApp.png" alt="cashapp" class="w-40 h-40">
+        <img src="/FFdraftVenmo.png" alt="venmo" class="w-40 h-40">
       </div>
     </div>
 </BaseModal>
@@ -72,7 +75,7 @@ export default {
       if (numberOfTeams < 10) {
         return "w-[230px]"
       }
-      return "w-[200px]"
+      return "w-[210px]"
 
     },
     calculateTransformY(){
@@ -89,6 +92,9 @@ export default {
       return { translateY: translateYValue };
     },
     timerActive() {
+      if (!this.timer.active){
+        return false
+      }
       if (this.timer && this.timer.minutes !== null && this.timer.seconds !== null) {
         return true;
       }
@@ -158,12 +164,10 @@ export default {
       const endColumn = picks.value[picks.value.length - 1];
       const round = Math.min(notNullLength(startColumn), notNullLength(endColumn));
       if (round == draft.value.roster_spots) {
-        timer.value.minutes = 0;
-        timer.value.seconds = 0;
-        clearInterval(interval.value);
+        timer.value.active = false
         modalPopup.value = true;
         return draft.value.roster_spots;
-      }
+      } 
       return round + 1;
     });
 
@@ -176,11 +180,11 @@ export default {
       ]);
 
       modalPopup.value = true;
-      console.log(modalPopup);
-      console.log(fetchedDraft);
-      console.log(fetchedTeams);
-      console.log(fetchedPicks);
-      console.log(fetchedTimer);
+      // console.log(modalPopup);
+      // console.log(fetchedDraft);
+      // console.log(fetchedTeams);
+      // console.log(fetchedPicks);
+      // console.log(fetchedTimer);
 
       draft.value = fetchedDraft;
       teams.value = fetchedTeams;
@@ -207,7 +211,49 @@ export default {
       }
       draft.value.round = calculateRound();
 
-      const ws = new WebSocket('ws://localhost:5000');
+      const pickSocket = new WebSocket('ws://127.0.0.1:4000/pick/');
+      const timerSocket = new WebSocket('ws://127.0.0.1:4000/timer/');
+
+      pickSocket.onopen = ((event) => {
+        //console.log("Pick Socket connection opened:", event);
+      });
+
+      pickSocket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+        const pick = message.message;
+        const [x, y] = calculateArrayPosition(pick.pick_round, pick.pick_number);
+        picks.value[x][y] = pick;
+        draft.value.round = calculateRound();
+        timer.value.started = false;
+        timer.value.minutes = fetchedTimer.minutes;
+        timer.value.seconds = fetchedTimer.seconds;
+        draft.minutes = 0;
+        //clearInterval(interval.value);
+    };
+
+
+      pickSocket.onclose = ((event) => {
+        //console.log("Pick Socket connection closed:", event);
+      });
+
+      timerSocket.onopen = ((event) => {
+        //console.log("Timer Socket connection opened:", event);
+      });
+
+      timerSocket.onmessage = ((event) => {
+        const message = JSON.parse(event.data);
+        timerData = message.message;
+        timer.value.minutes = timerData.minutes;
+        timer.value.seconds = timerData.seconds;
+        draft.value.minutes = timerData.minutes;
+        draft.value.seconds = timerData.seconds;
+      });
+
+      timerSocket.onclose = ((event) => {
+        //console.log("Timer Socket connection closed:", event);
+      })
+
+
     }); 
 
     const setBodyOverflow = () => {
@@ -254,5 +300,4 @@ export default {
 .z-max {
   z-index: 100;
 }
-
 </style>  
