@@ -1,5 +1,5 @@
 
-const APIURL = 'http://localhost:3000/api_v1/';
+const APIURL = 'http://127.0.0.1:3000/api_v1/';
 //const APIURL = 'https://espndraftboard.com/api/';
 
 function getCurrentYear() {
@@ -7,12 +7,9 @@ function getCurrentYear() {
     return currentDate.getFullYear();
 }
 
-export async function fetchDraft(id, authToken) {
+export async function fetchDraft(id) {
     try {
         const response = await fetch(`${APIURL}get-draft/${id}-${getCurrentYear()}`, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
         });
         return await response.json();
     } catch (error) {
@@ -20,12 +17,9 @@ export async function fetchDraft(id, authToken) {
     }
 }
 
-export async function fetchTeams(id, authToken) {
+export async function fetchTeams(id) {
     try {
         const response = await fetch(`${APIURL}get-teams/${id}-${getCurrentYear()}`, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
         });
         return await response.json();
     } catch (error) {
@@ -33,12 +27,9 @@ export async function fetchTeams(id, authToken) {
     }
 }
 
-export async function fetchPicks(id, authToken) {
+export async function fetchPicks(id) {
     try {
         const response = await fetch(`${APIURL}get-picks/${id}-${getCurrentYear()}`, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
         });
         return await response.json();
     } catch (error) {
@@ -46,12 +37,9 @@ export async function fetchPicks(id, authToken) {
     }
 }
 
-export async function fetchTimer(id, authToken) {
+export async function fetchTimer(id) {
     try {
         const response = await fetch(`${APIURL}get-timer/${id}-${getCurrentYear()}`, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
         });
         return await response.json();
     } catch (error) {

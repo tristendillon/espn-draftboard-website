@@ -26,7 +26,7 @@ class="cell py-2 rounded-xl px-2 h-[100px]">
   </div>
 </div>
 <div v-else>
-  <div :class="calculateHighlight(columnIndex, pickNumber) ? 'highlighted': ''" class="bg-secondary rounded-xl ml-1 mt-1 py-2 px-2 h-[100px]">
+  <div :class="highlighted ? 'highlighted': ''" class="bg-secondary cell py-2 rounded-xl px-2 h-[100px]">
     <div class="player grid grid-cols-2 grid-rows-3">
       <div class="col-start-1"></div>
       <div class="col-start-1 row-start-2"></div>
@@ -60,36 +60,12 @@ export default {
     draft: {
       type: Object
     },
-    picks: {
-      type: Array
+    highlighted: {
+      type: Boolean,
+      default: false,
     }
   },
   methods: {
-    calculateHighlight(x, y) {
-      if (x == 0 && y == 0) { return true; }
-      if (y % 2 == 0) {
-        if (x == 0) { 
-          if (this.picks[x][y -1 ]){
-            return true
-          }
-          return false; 
-        }
-        if (this.picks[x - 1][y]){
-          return true;
-        }
-        return false;
-      } else{ 
-        if (x == this.draft.teams - 1) { 
-          if (this.picks[x][y -1 ]){
-            return true
-          }
-          return false; 
-        }
-        if (this.picks[x + 1][y]){
-          return true;
-        }
-      }
-    },
     calculateBG(pos){
       switch (pos) {
         case 'RB': return 'bg-pick-rb';
@@ -150,4 +126,8 @@ export default {
   opacity: 0.7;
 } 
 
+.highlighted {
+  background-color: #555b6b;
+  opacity: .9;
+}
 </style>

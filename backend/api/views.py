@@ -5,12 +5,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .permissions import PostPermission, GetPermission
 from .serializers import *
 from .models import *
         
 class PostDraftView(APIView):
-    permission_classes = [PostPermission,]
     
     def post(self, request):
         serializer = PostDraftSerializer(data=request.data)
@@ -30,7 +28,6 @@ class PostDraftView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetDraftView(APIView):
-    permission_classes = [GetPermission,]
     
     def get(self, request, draft_id):
         draft = get_object_or_404(Draft, pk = draft_id)
@@ -40,7 +37,6 @@ class GetDraftView(APIView):
 
 
 class PostPickView(APIView):
-    permission_classes = [PostPermission,]
     
     def post(self, request):
         if not (draft_id := request.data.get('draft_id')):
@@ -70,7 +66,6 @@ class PostPickView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetPickView(APIView):
-    permission_classes = [GetPermission,]
     
     def get(self, request, draft_id):
         draft = get_object_or_404(Draft, pk = draft_id)
@@ -82,7 +77,6 @@ class GetPickView(APIView):
     
     
 class PostTeamView(APIView):
-    permission_classes = [PostPermission,]
     
     def post(self, request):
         if not (draft_id := request.data.get('draft_id')):
@@ -109,7 +103,6 @@ class PostTeamView(APIView):
     
     
 class GetTeamView(APIView):
-    permission_classes = [GetPermission,]
     
     def get(self, request, draft_id):
         draft = get_object_or_404(Draft, pk = draft_id)
@@ -120,7 +113,6 @@ class GetTeamView(APIView):
     
     
 class PostTimerView(APIView):
-    permission_classes = [PostPermission,]
     
     def post(self, request):
         if not (draft_id := request.data.get('draft_id')):
@@ -144,7 +136,6 @@ class PostTimerView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class GetTimerView(APIView):
-    permission_classes = [GetPermission,]
     
     def get(self, request, draft_id):
         draft = get_object_or_404(Draft, pk = draft_id)

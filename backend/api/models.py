@@ -9,7 +9,7 @@ class Draft(models.Model):
 class Timer(models.Model):
     minutes = models.IntegerField(null=False, default=0)
     seconds = models.IntegerField(null=False, default=0)
-    draft_id = models.ForeignKey(to=Draft, null=False, on_delete=models.CASCADE)
+    draft_id = models.OneToOneField(to=Draft, null=False, on_delete=models.CASCADE)
 
 
 class Team(models.Model):

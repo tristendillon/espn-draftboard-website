@@ -27,12 +27,17 @@
       <div class="flex flex-col w-min-[120px]">
         <div v-for="(pick, pickNumber) in column" :key="pickNumber" class="">
           <div class="mt-1 ml-1 rounded-xl">
-            <PlayerCell :pickNumber="pickNumber" :columnIndex="columnIndex" :pick="pick" :draft="draft" :picks="picks"/>
+            <PlayerCell :pickNumber="pickNumber" :columnIndex="columnIndex" :pick="pick" :draft="draft" :highlighted="calculateHighlight(columnIndex, pickNumber)"/>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <BaseModal class="z-max" :modalActive="modalPopup" @close-modal="closePopup">
+    <div>
+      
+    </div>
+  </BaseModal>
 </div>
 <div v-else class="flex justify-center items-center h-screen">
   <div class="text-5xl text-white ">
@@ -43,10 +48,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import PlayerCell from '../components/PlayerCell.vue';
 import Timer from '../components/Timer.vue';
-import { fetchDraft, fetchPicks, fetchTeams} from '../apis/index.js';
+import BaseModal from '../components/BaseModal.vue';
+import { fetchDraft, fetchPicks, fetchTeams, fetchTimer} from '../apis/index.js';
 
 export default {
   computed: {
@@ -70,7 +76,39 @@ export default {
       return false;
     },
   },
+  methods: {
+    closePopup() {
+      this.modalPopup = false;
+    }, 
+    calculateHighlight(x, y) {
+      if (x == 0 && y == 0) { return true; }
+      if (y % 2 == 0) {
+        if (x == 0) { 
+          if (this.picks[x][y -1 ]){
+            return true
+          }
+          return false; 
+        }
+        if (this.picks[x - 1][y]){
+          return true;
+        }
+        return false;
+      } else{ 
+        if (x == this.draft.teams - 1) { 
+          if (this.picks[x][y -1 ]){
+            return true
+          }
+          return false; 
+        }
+        if (this.picks[x + 1][y]){
+          return true;
+        }
+      }
+    },
+  },  
   setup() {
+    const modalPopup = ref(null);
+
     const picks = ref([]);
     const draft = ref(null);
     const teams = ref([]);
@@ -110,22 +148,30 @@ export default {
     });
 
     onMounted(async () => {
-      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21faWQiOiJiRk8zOHdxTFZwTUZtVGVHWmhwQ3d3IiwiZXhwIjoxNjk5OTI4NDM5fQ.TjAPF29aJEp5-vb4JuWZ2RKQ7ArTiNbiqo5z6YPelOU'
-      //const authToken = process.env.BEARER_TOKEN;
+      const [fetchedDraft, fetchedTeams, fetchedPicks, fetchedTimer] = await Promise.all([
+        fetchDraft(id),
+        fetchTeams(id),
+        fetchPicks(id),
+        fetchTimer(id)
+      ]);
 
-      const fetchedDraft = await fetchDraft(id, authToken);
-      const fetchedTeams = await fetchTeams(id, authToken);
-      const fetchedPicks = await fetchPicks(id, authToken);
-
+      modalPopup.value = true;
+      console.log(modalPopup);
       console.log(fetchedDraft);
       console.log(fetchedTeams);
       console.log(fetchedPicks);
+      console.log(fetchedTimer);
 
-      draft.value = fetchedDraft[0];
+      draft.value = fetchedDraft;
       teams.value = fetchedTeams;
+      if (fetchedTimer) {
+        timer.value.minutes = fetchedTimer.minutes;
+        timer.value.seconds = fetchedTimer.seconds;
+      }else{
+        timer.value.minutes = 0;
+        timer.value.seconds = 0;
+      }
 
-      timer.value.minutes = draft.value.minutes;
-      timer.value.seconds = draft.value.seconds;
       for (let i = 0; i < draft.value.teams; i++) {
         const column = []
         for (let j = 0; j < draft.value.roster_spots; j++) {
@@ -144,14 +190,29 @@ export default {
       const ws = new WebSocket('ws://localhost:5000');
     }); 
 
+    const setBodyOverflow = () => {
+      if (modalPopup.value) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    };
+
+    watch(modalPopup, setBodyOverflow);
+
+    onUnmounted(() => {
+      document.body.style.overflow = '';
+    })
+    
     return {
       picks,
       draft,
       teams,
-      timer
+      timer,
+      modalPopup
     };
   },
-  components: { PlayerCell, Timer }
+  components: { PlayerCell, Timer, BaseModal}
 }
 </script>
 
@@ -160,15 +221,18 @@ export default {
   position: sticky;
   top: 0;
   background: #030617;
-  z-index: 100; 
+  z-index: 99; 
 }
 
 .draft-header-container {
   position: sticky;
   top: 0;
   background: #030617;
-  z-index: 99; 
+  z-index: 98; 
 }
 
+.z-max {
+  z-index: 100;
+}
 
-</style>
+</style>  
