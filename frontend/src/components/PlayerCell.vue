@@ -52,7 +52,7 @@ export default {
     },
     pickSetting: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     pick: {
       type: Object,
