@@ -211,53 +211,44 @@ export default {
       }
       draft.value.round = calculateRound();
 
-      const pickSocket = new WebSocket('wss://espndraftboard.com/ws/');
-      const timerSocket = new WebSocket('wss://espndraftboard.com/ws/');
+      const socket = new WebSocket('wss://espndraftboard.com/ws/');
 
-      pickSocket.onopen = ((event) => {
+      socket.onopen = ((event) => {
         //console.log("Pick Socket connection opened:", event);
       });
 
-      pickSocket.onmessage = function(event) {
+      socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
-        const pick = message.message;
-        if(pick.draft_id != id) {
-          return;
+        if (message.message.name){
+          const pick = message.message;
+          if(pick.draft_id != id) {
+            return;
+          }
+          const [x, y] = calculateArrayPosition(pick.pick_round, pick.pick_number);
+          picks.value[x][y] = pick;
+          draft.value.round = calculateRound();
+          timer.value.started = false;
+          timer.value.minutes = fetchedTimer.minutes;
+          timer.value.seconds = fetchedTimer.seconds;
+          draft.minutes = 0;
+        }else {
+          timerData = message.message;
+          if(timerData.draft_id != id) {
+            return;
+          }
+          timer.value.minutes = timerData.minutes;
+          timer.value.seconds = timerData.seconds;
+          draft.value.minutes = timerData.minutes;
+          draft.value.seconds = timerData.seconds;
         }
-        const [x, y] = calculateArrayPosition(pick.pick_round, pick.pick_number);
-        picks.value[x][y] = pick;
-        draft.value.round = calculateRound();
-        timer.value.started = false;
-        timer.value.minutes = fetchedTimer.minutes;
-        timer.value.seconds = fetchedTimer.seconds;
-        draft.minutes = 0;
-        //clearInterval(interval.value);
-    };
+        
+      };
 
 
-      pickSocket.onclose = ((event) => {
+      socket.onclose = ((event) => {
         //console.log("Pick Socket connection closed:", event);
       });
 
-      timerSocket.onopen = ((event) => {
-        //console.log("Timer Socket connection opened:", event);
-      });
-
-      timerSocket.onmessage = ((event) => {
-        const message = JSON.parse(event.data);
-        timerData = message.message;
-        if(timerData.draft_id != id) {
-          return;
-        }
-        timer.value.minutes = timerData.minutes;
-        timer.value.seconds = timerData.seconds;
-        draft.value.minutes = timerData.minutes;
-        draft.value.seconds = timerData.seconds;
-      });
-
-      timerSocket.onclose = ((event) => {
-        //console.log("Timer Socket connection closed:", event);
-      })
 
 
     }); 
