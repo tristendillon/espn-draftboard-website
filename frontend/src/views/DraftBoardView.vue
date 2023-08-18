@@ -193,11 +193,11 @@ export default {
       draft.value = fetchedDraft;
       teams.value = fetchedTeams;
       if (fetchedTimer) {
-	timer.value.active = true;
+	      timer.value.active = true;
         timer.value.minutes = fetchedTimer.minutes;
         timer.value.seconds = fetchedTimer.seconds;
       }else{
-	timer.value.active = false;
+	      timer.value.active = false;
       }
 
       for (let i = 0; i < draft.value.teams; i++) {
