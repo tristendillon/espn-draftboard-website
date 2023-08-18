@@ -170,6 +170,10 @@ export default {
       } 
       return round + 1;
     });
+    const getCurrentYear = (() => {
+	const date = new Date();
+	return date.getFullYear();
+    });
 
     onMounted(async () => {
       const [fetchedDraft, fetchedTeams, fetchedPicks, fetchedTimer] = await Promise.all([
@@ -189,11 +193,11 @@ export default {
       draft.value = fetchedDraft;
       teams.value = fetchedTeams;
       if (fetchedTimer) {
+	timer.value.active = true;
         timer.value.minutes = fetchedTimer.minutes;
         timer.value.seconds = fetchedTimer.seconds;
       }else{
-        timer.value.minutes = 0;
-        timer.value.seconds = 0;
+	timer.value.active = false;
       }
 
       for (let i = 0; i < draft.value.teams; i++) {
@@ -216,14 +220,20 @@ export default {
       socket.onopen = ((event) => {
         //console.log("Pick Socket connection opened:", event);
       });
-
+	
+	
       socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
-        if (message.message.name){
+        //console.log(message);
+	if (message.message.name){
           const pick = message.message;
-          if(pick.draft_id != id) {
+          
+    	  //console.log(id);
+	  //console.log(pick);
+	  if(pick.draft_id != id + '-' + getCurrentYear()) {
             return;
           }
+	  
           const [x, y] = calculateArrayPosition(pick.pick_round, pick.pick_number);
           picks.value[x][y] = pick;
           draft.value.round = calculateRound();
@@ -231,15 +241,13 @@ export default {
           timer.value.minutes = fetchedTimer.minutes;
           timer.value.seconds = fetchedTimer.seconds;
           draft.minutes = 0;
-        }else {
+        }else if (message.message.minutes){
           timerData = message.message;
-          if(timerData.draft_id != id) {
+          if(timerData.draft_id != id + '-' + getCurrentYear()) {
             return;
           }
           timer.value.minutes = timerData.minutes;
           timer.value.seconds = timerData.seconds;
-          draft.value.minutes = timerData.minutes;
-          draft.value.seconds = timerData.seconds;
         }
         
       };
