@@ -8,6 +8,10 @@ from rest_framework import status
 from .serializers import *
 from .models import *
 
+DEFAULT_PICK_IMAGE = 'https://a.espncdn.com/combiner/i?img=/games/lm-static/ffl/images/nomug.png&w=96&h=70&cb=1'
+DEFAULT_TEAM_IMAGE = 'https://g.espncdn.com/lm-static/ffl/images/default_logos/20.svg'
+
+
 class PostDraftView(APIView):
     
     def post(self, request):
@@ -48,7 +52,11 @@ class PostPickView(APIView):
             data = serializer.validated_data
             draft = get_object_or_404(Draft, pk = draft_id)
             
-            icon = data.get('icon', DEFAULT_PICK_ICON)
+            icon = data.get('icon', DEFAULT_PICK_IMAGE)
+            
+            check_for_pick = Pick.objects.filter(draft_id = draft, pick_round = data.get('pick_round'), pick_number = data.get('pick_number'))
+            if check_for_pick.exists():
+                return Response({'Not created': 'That pick already exists for this draft'}, status= status.HTTP_202_ACCEPTED)
             
             pick = Pick.objects.create(
                 name = data.get('name'),
@@ -88,7 +96,7 @@ class PostTeamView(APIView):
             data = serializer.validated_data
             draft = get_object_or_404(Draft, pk= draft_id)
             
-            team_image =  data.get('team_image', DEFAULT_TEAM_ICON)
+            team_image =  data.get('team_image', DEFAULT_TEAM_IMAGE)
             
             team = Team.objects.create(
                 name = data.get('name'),
