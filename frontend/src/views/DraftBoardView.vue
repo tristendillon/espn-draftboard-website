@@ -11,16 +11,20 @@
     <div class="flex ml-24 px-16 items-center justify-center">
       <h1 class="ld:text-4xl md:text-2xl sm:text-xl text-team font-semibold text-center">{{ draft.name.trim() }}</h1>
     </div>
-    <div class="flex flex-justify-end flex-col">
+    <div class="flex flex-justify-end mt-5 flex-col">
         <h1 class="ld:text-4xl md:text-2xl sm:text-xl text-team font-semibold">Round {{ draft.round }}</h1>
         <h2 class="flex justify-end text-xl text-gray-500 mr-3"> of 16</h2>
     </div>
-  </div>
+	<div class="ml-8 mt-5 flex flex-row">
+	    <img class="w-[110px] mr-5" src="/FFdraftVenmo.png"/>
+	    <img class="w-[110px]" src="/FFdraftCashApp.png"/>
+	</div>
+    </div>
   <div class="draft-board flex px-10 justify-around absolute py-5">
     <div v-for="(column, columnIndex) in picks" :key="columnIndex" class="flex-col items-stretch" :class="calculateWidth">
       <div v-if="teams[columnIndex]" class="draft-header-container relative" v-y-transform="calculateTransformY">
         <div class="draft-user-header flex justify-center">
-          <div class="header-text mt-3 mb-3 text-team">{{ teams[columnIndex].name.trim() }}</div>
+          <div class="header-text mt-3 mb-3 text-team">{{ editName(teams[columnIndex].name.trim()) }}</div>
         </div>
       </div>
       <div v-else class="draft-header-container">
@@ -80,13 +84,13 @@ export default {
     },
     calculateTransformY(){
       const windowWidth = window.innerWidth;
-      let translateYValue = 67;
+      let translateYValue = 130;
       
       if (windowWidth < 1100) {
-        translateYValue = 109;
+        translateYValue += 42;
       }
       if (windowWidth < 800) {
-        translateYValue = 88;
+        translateYValue += 21;
       }
 
       return { translateY: translateYValue };
@@ -102,6 +106,12 @@ export default {
     },
   },
   methods: {
+	editName(name){
+		if (name.length > 21){
+			return name.slice(0, 20) + '...';
+		}
+		return name;
+	},
     closePopup() {
       this.modalPopup = false;
     }, 
@@ -165,7 +175,7 @@ export default {
       const round = Math.min(notNullLength(startColumn), notNullLength(endColumn));
       if (round == draft.value.roster_spots) {
         timer.value.active = false
-        modalPopup.value = true;
+        //modalPopup.value = true;
         return draft.value.roster_spots;
       } 
       return round + 1;

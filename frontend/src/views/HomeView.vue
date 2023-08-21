@@ -11,7 +11,7 @@
       <div class="mt-10 flex flex-row justify-around mb-5 items-center">
         <div class="flex flex-col">
           <div class="text-2xl font-muli font-medium text-pick-number text-center mb-5"><a class="hover:text-blue-500" href="https://cash.app/$DraftBoard?qr=1" target="_blank">CashApp</a></div>
-          <img src="public/FFdraftCashApp.png" alt="cashapp" />
+          <img src="/FFdraftCashApp.png" alt="cashapp" />
         </div>
         <!-- <div class="flex flex-col">
             <div class="text-xl font-muli font-medium text-pick-number text-center mb-5">
@@ -20,7 +20,7 @@
         </div> -->
         <div class="flex flex-col">
           <div class="text-2xl font-poppins font-medium text-pick-number text-center mb-5"><a class="hover:text-blue-500" href="https://venmo.com/code?user_id=2296110345355264909&cre" target="_blank">Venmo</a></div>
-          <img class="w-[256px]" src="public/FFdraftVenmo.png" alt="venmo" />
+          <img class="w-[256px]" src="/FFdraftVenmo.png" alt="venmo" />
         </div>
       </div>
     </div>

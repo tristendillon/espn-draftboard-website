@@ -4,7 +4,7 @@ class="cell py-2 rounded-xl px-2 h-[100px]">
   <div class="player flex flex-row">
     <div>
       <div class="text-pick-text player-name font-bold">
-        {{ pick.name.split(" ")[0].charAt(0 ) }}. {{ pick.name.split(" ")[1] }}
+	{{ editName(pick.name) }}
       </div>
       <div class="text-pick-position">
         {{ pick.position }} <a class="font-bold">-</a> {{ pick.football_team }}
@@ -20,7 +20,7 @@ class="cell py-2 rounded-xl px-2 h-[100px]">
         {{ calculatePick(pickNumber, columnIndex, false) }}
       </span>
       <div class="avatar-player flex justify-end">
-        <img class="w-[75px] h-[64px]" :src="pick.icon"/>
+        <img class="w-[75px] h-[64px]" :src="pick.icon ? pick.icon : 'https://a.espncdn.com/combiner/i?img=/games/lm-static/ffl/images/nomug.png&w=96&h=70&cb=1'"/>
       </div>
     </div>
   </div>
@@ -78,6 +78,16 @@ export default {
         default: return 'bg-secondary'
       }
     },
+	editName(name){
+		const nameSplit = name.split(" ");
+		if (nameSplit.includes('D/ST')) {
+			return name;
+		}
+		const abrName = nameSplit[0].charAt(0);
+
+		const restName = nameSplit.splice(1).join(" ");
+		return abrName + '. ' + restName; 
+	},
     calculatePick(roundIndex, teamIndex, roundByRound) {
       if (!roundByRound){
         if (roundIndex % 2 == 0) {
